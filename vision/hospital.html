@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickMed - Nearby Doctors</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root{ --dark-bg: #0a5347;
+            --darker-bg: #050508;
+            --card-bg: rgba(22, 34, 33, 0.85);
+            --accent-color: #4a6fff;
+            --text-color: #f0f0f8;
+            --secondary-text: #b0b0c0;
+            --emergency-red: #ff4a6a;
+            --doctor-blue: #4a8fff;
+            --ambulance-orange: #ff8a4a;
+            --nav-bg: rgba(10, 10, 18, 0.9);
+            --nav-text: #f0f0f8;
+            --nav-hover: #4a6fff;
+             --primary-accent: #20c9c9;
+      --secondary-accent: #189898;
+      --card-bg: #1e1e1e;
+      --card-border: #333333;
+      --text-light: #f0f0f0;
+      --text-secondary: #b0b0b0;
+      --success-green: #34a853;
+      --error-red: #ea4335;
+      --accent-glow: rgba(32, 201, 201, 0.15);
+      --input-bg: #2a2a2a;}
+        body {
+            background-color: var(--dark-bg);
+            color: whitesmoke;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(rgba(10, 10, 18, 0.585), rgba(10, 10, 18, 0.514)),
+                url('./234.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            transition: all 0.5s ease;
+        }
+
+        body.light-theme {
+            --dark-bg: #f0f0f8c4;
+            --darker-bg: #e0e0e89c;
+            --card-bg: rgba(255, 255, 255, 0.455);
+            --text-color: #0a0a12;
+            --secondary-text: #505060;
+            --nav-bg: rgba(240, 240, 248, 0.9);
+            --nav-text: #0a0a12;
+            --nav-hover: #4a6fff;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.138), rgba(252, 252, 255, 0.264)),
+                url('./233.jpg');
+                background-position: center;
+                background-size: cover;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+
+        .container1 {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-color);
+            text-decoration: none;
+            background: linear-gradient(90deg, var(--accent-color), var(--emergency-red));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--nav-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 1rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--nav-hover);
+        }
+
+        .utility-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            color: var(--nav-text);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #ffffff;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            color: #fafbfb;
+            margin: 30px 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .location-btn {
+            padding: 12px 25px;
+            background-color: #ff0033;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .location-btn:hover {
+            background-color: #cc002a;
+            transform: translateY(-2px);
+        }
+
+        .hospitals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px; /* Increased gap between cards */
+            margin-top: 20px;
+        }
+
+        .hospital-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hospital-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .hospital-card h3 {
+            margin: 0 0 15px;
+            color: #ffffff;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .hospital-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .hospital-info p {
+            margin: 0;
+            color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+        }
+
+        .hospital-info i {
+            color: #ff0033;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .call-btn {
+            margin-top: auto;
+            padding: 12px 20px;
+            background-color: #ff0033;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            width: fit-content;
+        }
+
+        .call-btn:hover {
+            background-color: #cc002a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(255, 0, 0, 0.4);
+        }
+
+        .loading {
+            display: none;
+            margin: 20px 0;
+            color: #fff;
+            font-size: 1.1rem;
+        }
+
+        .loading i {
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .hospitals-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hospital-card {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .location-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+     <header>
+        <div class="container1">
+            <nav class="navbar">
+                <a href="index.html" class="logo">Safeguard Online</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+          <li><a href="emergency.html">Emergency Help</a></li>
+          <li><a href="hospital.html">Hospitals</a></li>
+          <li><a href="do.html">Doctors</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="feature.html">Features</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Login/Register</a></li>
+          <li><a href="user.html">User Profile</a></li>
+                </ul>
+                <div class="utility-buttons">
+                    <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+                </div>
+            </nav>
+        </div>
+    </header><br><br><br>
+    <div class="container">
+        <h1>Find Nearby Hospitals</h1>
+        <button class="location-btn" onclick="getLocation()">
+            <i class="fas fa-map-marker-alt"></i> Detect Location & Find Hospitals
+        </button>
+        
+        <div id="loading" class="loading">
+            <i class="fas fa-spinner"></i> Finding hospitals near you...
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+    const hospitals = [
+        { name: "Tabba Heart Institute", lat: 24.8850, lon: 67.0700, contact: "+92 21 111 844 844" },
+        { name: "Medicare Cardiac & General Hospital", lat: 24.8580, lon: 67.0044, contact: "+92 21 111 001 786" },
+        { name: "Dr. Ziauddin Hospital", lat: 24.8650, lon: 67.0030, contact: "021-111-942-942" },
+        { name: "Memon Medical Institute Hospital", lat: 24.9150, lon: 67.0900, contact: "021-111-664-664" },
+        { name: "Civil Hospital Karachi", lat: 24.8624, lon: 67.0099, contact: "+92-344-3333004" },
+        { name: "Indus Hospital", lat: 24.8258, lon: 67.1501, contact: "(021) 111 111 880" },
+        { name: "Aga Khan University Hospital", lat: 24.8688, lon: 67.0692, contact: "+92 21 111 911 911" },
+        { name: "Jinnah Postgraduate Medical Center", lat: 24.8615, lon: 67.0363, contact: "+92-21-99201300" },
+        { name: "RIMS Trauma Hospital", lat: 24.8800, lon: 67.0600, contact: "(021) 34311340-3" }
+    ];
+
+    function haversine(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+    }
+
+    function getLocation() {
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('results').innerHTML = '';
+        
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showNearbyHospitals, showError);
+        } else {
+            document.getElementById('loading').style.display = 'none';
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+
+    function showError(error) {
+        document.getElementById('loading').style.display = 'none';
+        alert("Location Error: " + error.message);
+    }
+
+    function showNearbyHospitals(position) {
+        const userLat = position.coords.latitude;
+        const userLon = position.coords.longitude;
+
+        // Simulate loading delay for better UX
+        setTimeout(() => {
+            const nearby = hospitals.map(hospital => {
+                const distance = haversine(userLat, userLon, hospital.lat, hospital.lon);
+                return { ...hospital, distance: distance.toFixed(2) };
+            }).sort((a, b) => a.distance - b.distance);
+
+            let html = `<h2><i class="fas fa-hospital"></i> Nearby Hospitals</h2>
+                       <div class="hospitals-grid">`;
+            
+            nearby.forEach(hospital => {
+                html += `
+                    <div class="hospital-card">
+                        <h3>${hospital.name}</h3>
+                        <div class="hospital-info">
+                            <p><i class="fas fa-map-marker-alt"></i> ${hospital.distance} KM away</p>
+                            <p><i class="fas fa-phone"></i> ${hospital.contact}</p>
+                        </div>
+                        <a href="tel:${hospital.contact.replace(/[^+\d]/g, '')}" class="call-btn">
+                            <i class="fas fa-phone-alt"></i> Call Now
+                        </a>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            document.getElementById("results").innerHTML = html;
+            document.getElementById('loading').style.display = 'none';
+        }, 1000); // 1 second delay to show loading state
+    }
+
+    themeToggle.addEventListener('click', () => {
+                const icon = themeToggle.querySelector('i');
+                document.body.classList.toggle('light-theme');
+
+                // Change icon
+                if (document.body.classList.contains('light-theme')) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                }
+            });
+            
+            // Event listeners
+            prevBtn.addEventListener('click', () => {
+                prevItem();
+                if (isAutoRotate) {
+                    stopAutoRotate();
+                    startAutoRotate();
+                }
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                nextItem();
+                if (isAutoRotate) {
+                    stopAutoRotate();
+                    startAutoRotate();
+                }
+            });
+            
+            autoRotateToggle.addEventListener('change', function() {
+                isAutoRotate = this.checked;
+                if (isAutoRotate) {
+                    startAutoRotate();
+                } else {
+                    stopAutoRotate();
+                }
+            });
+    </script>
+</body>
+</html>

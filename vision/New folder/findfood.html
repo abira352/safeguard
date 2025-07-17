@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Free Food Nearby | NourishLocal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        /* Global Styles (consistent with homepage) */
+        :root {
+            --primary-green: #4CAF50;
+            --dark-green: #388E3C;
+            --primary-blue: #2196F3;
+            --dark-blue: #1976D2;
+            --text-dark: #333;
+            --text-light: #fff;
+            --bg-light: #f9f9f9;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-green);
+            color: var(--text-light);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--dark-green);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--primary-blue);
+            color: var(--text-light);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--dark-blue);
+            transform: translateY(-2px);
+        }
+        
+        section {
+            padding: 40px 0;
+        }
+        
+        h1, h2, h3 {
+            margin-bottom: 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--text-light);
+            box-shadow: var(--box-shadow);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-green);
+            text-decoration: none;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a.active {
+            color: var(--primary-green);
+            font-weight: 600;
+            border-bottom: 2px solid var(--primary-green);
+            padding-bottom: 5px;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-green);
+        }
+        
+        .auth-buttons .btn {
+            margin-left: 15px;
+            padding: 8px 16px;
+        }
+        
+        /* Page Header */
+        .page-header {
+            background-color: var(--primary-green);
+            color: var(--text-light);
+            padding: 100px 0 40px;
+            margin-top: 60px;
+        }
+        
+        .page-header h1 {
+            font-size: 36px;
+        }
+        
+        .location-display {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+        
+        .location-display i {
+            margin-right: 10px;
+        }
+        
+        /* Search & Filter Section */
+        .search-section {
+            background-color: var(--bg-light);
+            padding: 30px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 60px;
+            z-index: 900;
+        }
+        
+        .search-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .search-input {
+            flex: 2;
+            min-width: 300px;
+        }
+        
+        .location-input {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        input[type="text"], input[type="search"], select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+        }
+        
+        .filter-toggle {
+            display: flex;
+            align-items: center;
+            color: var(--primary-green);
+            font-weight: 600;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+        
+        .filter-toggle i {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        .filter-toggle.active i {
+            transform: rotate(180deg);
+        }
+        
+        .filter-options {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: var(--text-light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .filter-options.active {
+            display: block;
+        }
+        
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .filter-group h4 {
+            margin-bottom: 10px;
+            color: var(--primary-green);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .checkbox-item input {
+            margin-right: 8px;
+        }
+        
+        .filter-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        /* Main Content - Map & Listings */
+        .main-content {
+            display: flex;
+            margin-top: 20px;
+            gap: 20px;
+        }
+        
+        .map-container {
+            flex: 2;
+            height: 600px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            position: relative;
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .listings-container {
+            flex: 1;
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .listing-card {
+            background-color: var(--text-light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .listing-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .listing-card.active {
+            border: 2px solid var(--primary-green);
+        }
+        
+        .listing-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: var(--border-radius);
+            margin-bottom: 10px;
+        }
+        
+        .listing-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .listing-donor {
+            color: #666;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .listing-distance {
+            display: flex;
+            align-items: center;
+            color: var(--primary-green);
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .listing-distance i {
+            margin-right: 5px;
+        }
+        
+        .listing-expiry {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+        
+        .view-details-btn {
+            display: block;
+            text-align: center;
+            padding: 8px;
+            background-color: var(--primary-green);
+            color: var(--text-light);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* Mobile Toggle View */
+        .view-toggle {
+            display: none;
+            margin-bottom: 20px;
+        }
+        
+        .view-toggle-btn {
+            padding: 10px 20px;
+            background-color: var(--primary-green);
+            color: var(--text-light);
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .view-toggle-btn.active {
+            background-color: var(--dark-green);
+        }
+        
+        /* Modal for Listing Details */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: var(--text-light);
+            margin: 50px auto;
+            max-width: 800px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            padding: 20px;
+            background-color: var(--primary-green);
+            color: var(--text-light);
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .listing-gallery {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        
+        .gallery-image {
+            height: 200px;
+            border-radius: var(--border-radius);
+        }
+        
+        .listing-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .details-main {
+            flex: 2;
+            min-width: 300px;
+        }
+        
+        .details-sidebar {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .detail-section {
+            margin-bottom: 20px;
+        }
+        
+        .detail-section h3 {
+            color: var(--primary-green);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        
+        .detail-map {
+            height: 200px;
+            border-radius: var(--border-radius);
+            margin-top: 10px;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .related-listings {
+            margin-top: 40px;
+        }
+        
+        .related-listings h3 {
+            color: var(--primary-green);
+        }
+        
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--text-dark);
+            color: var(--text-light);
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        
+        .footer-links {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links h3 {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--text-light);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-icons a {
+            color: var(--text-light);
+            font-size: 20px;
+            transition: color 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            color: var(--primary-green);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .map-container, .listings-container {
+                flex: none;
+                width: 100%;
+            }
+            
+            .listings-container {
+                max-height: none;
+            }
+            
+            .view-toggle {
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+            }
+            
+            .map-container {
+                display: none;
+                height: 400px;
+            }
+            
+            .map-container.active {
+                display: block;
+            }
+            
+            .listings-container {
+                display: none;
+            }
+            
+            .listings-container.active {
+                display: block;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .page-header h1 {
+                font-size: 28px;
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .search-input, .location-input {
+                min-width: 100%;
+            }
+            
+            .modal-content {
+                margin: 20px auto;
+                width: 95%;
+            }
+            
+            .listing-details {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-leaf"></i> NourishLocal
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#" class="active">Find Food</a></li>
+                    <li><a href="#">Donate Food</a></li>
+                    <li><a href="#">How It Works</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="#" class="btn">Login</a>
+                    <a href="#" class="btn btn-primary">Sign Up</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Find Fresh, Free Food Near You</h1>
+            <p>Browse available listings on the map or by category in Karachi. Connect directly with donors to arrange pickup.</p>
+            <div class="location-display">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Current Location: Karachi, Sindh, Pakistan</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search & Filter Section -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-container">
+                <div class="search-input">
+                    <input type="search" placeholder="Search for 'bread', 'vegetables', 'dairy'...">
+                </div>
+                <div class="location-input">
+                    <input type="text" placeholder="Enter your address or Karachi neighborhood">
+                </div>
+            </div>
+            
+            <div class="filter-toggle">
+                <span>Filter Options</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            
+            <div class="filter-options">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <h4>Category</h4>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked> Baked Goods
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked> Fruits & Vegetables
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked> Dairy
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Meat
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked> Prepared Meals
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Pantry Items
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Other
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <h4>Dietary Needs</h4>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Vegetarian
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Vegan
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Gluten-Free
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked> Halal
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <h4>Availability</h4>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked> Available Now
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked> Available Today
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Available Tomorrow
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <h4>Distance</h4>
+                        <select>
+                            <option>Within 1 km</option>
+                            <option selected>Within 5 km</option>
+                            <option>Within 10 km</option>
+                            <option>Within 20 km</option>
+                            <option>Any Distance</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="filter-actions">
+                    <button class="btn">Reset Filters</button>
+                    <button class="btn btn-primary">Apply Filters</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="main-content-section">
+        <div class="container">
+            <!-- Mobile Toggle View -->
+            <div class="view-toggle">
+                <button class="view-toggle-btn active" data-view="map">Map View</button>
+                <button class="view-toggle-btn" data-view="list">List View</button>
+            </div>
+            
+            <div class="main-content">
+                <div class="map-container active" id="map-container">
+                    <div id="map"></div>
+                </div>
+                
+                <div class="listings-container" id="listings-container">
+                    <!-- Listing Card 1 -->
+                    <div class="listing-card" data-listing-id="1">
+                        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1472&q=80" alt="Fresh Bread" class="listing-image">
+                        <h3 class="listing-title">Freshly Baked Bread</h3>
+                        <p class="listing-donor">From: Sunrise Bakery</p>
+                        <div class="listing-distance">
+                            <i class="fas fa-location-dot"></i> 1.2 km away
+                        </div>
+                        <p class="listing-expiry">Available until 8 PM Today</p>
+                        <a href="#" class="view-details-btn">View Details</a>
+                    </div>
+                    
+                    <!-- Listing Card 2 -->
+                    <div class="listing-card" data-listing-id="2">
+                        <img src="https://images.unsplash.com/p

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NourishLocal - Nourish Your Community, Not Your Landfill</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* Basic Reset */
+        body, h1, h2, h3, p, ul, li {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: #fff;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo a {
+            font-size: 24px;
+            font-weight: 700;
+            color: #27ae60; /* Green primary color */
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: #82e0aa; /* Lighter green */
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #27ae60;
+        }
+
+        .user-actions a {
+            margin-left: 10px;
+        }
+
+        .hero {
+            background-color: #e3f2fd; /* Light blue background for hero */
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: #2c3e50; /* Dark blue */
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons a {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .button.primary {
+            background-color: #27ae60;
+            color: #fff;
+        }
+
+        .button.secondary {
+            background-color: #f39c12; /* Orange */
+            color: #fff;
+        }
+
+        .button.primary:hover {
+            background-color: #1e8449;
+        }
+
+        .button.secondary:hover {
+            background-color: #d68910;
+        }
+
+        .impact-counter {
+            margin-top: 30px;
+            color: #777;
+            font-style: italic;
+        }
+
+        .how-it-works {
+            padding: 80px 0;
+            background-color: #fff;
+            text-align: center;
+        }
+
+        .how-it-works h2 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 40px;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .step {
+            padding: 30px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .step i {
+            color: #27ae60;
+            margin-bottom: 20px;
+        }
+
+        .step h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .why-us {
+            padding: 80px 0;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        .why-us h2 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 40px;
+        }
+
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .benefit {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .benefit h3 {
+            font-size: 1.8rem;
+            color: #27ae60;
+            margin-bottom: 15px;
+        }
+
+        .benefit ul {
+            list-style: none;
+        }
+
+        .benefit ul li {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .benefit ul li i {
+            margin-right: 10px;
+            color: #27ae60;
+        }
+
+        .call-to-action {
+            background-color: #e3f2fd;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .call-to-action h2 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .cta-buttons a {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .call-to-action .button.primary {
+            background-color: #27ae60;
+            color: #fff;
+        }
+
+        .call-to-action .button.secondary {
+            background-color: #f39c12;
+            color: #fff;
+        }
+
+        .call-to-action .button.primary:hover {
+            background-color: #1e8449;
+        }
+
+        .call-to-action .button.secondary:hover {
+            background-color: #d68910;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        footer .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        footer nav ul {
+            list-style: none;
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        footer nav ul li {
+            margin: 0 15px;
+        }
+
+        footer nav ul li a {
+            text-decoration: none;
+            color: #eee;
+            transition: color 0.3s ease;
+        }
+
+        footer nav ul li a:hover {
+            color: #fff;
+        }
+
+        .social-icons a {
+            color: #eee;
+            font-size: 20px;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #fff;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+            color: #999;
+            margin-top: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header .container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .logo {
+                margin-bottom: 15px;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            nav ul li {
+                margin: 10px 0;
+            }
+
+            .hero {
+                padding: 80px 20px;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .benefits {
+                grid-template-columns: 1fr;
+            }
+
+            footer .container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            footer nav ul {
+                flex-direction: column;
+            }
+
+            footer nav ul li {
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="#">Nourish<i class="fa-solid fa-leaf"></i>Local</a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#">Find Food</a></li>
+                    <li><a href="#">Donate Food</a></li>
+                    <li><a href="#">How It Works</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li class="user-actions"><a href="#">Login</a> | <a href="#">Sign Up</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Nourish Your Community, Not Your Landfill.</h1>
+                <p>Connect directly with neighbors to share surplus food and reduce waste, right here in Karachi!</p>
+                <div class="hero-buttons">
+                    <a href="#" class="button primary">Find Free Food Nearby</a>
+                    <a href="#" class="button secondary">Donate Your Surplus Food</a>
+                </div>
+                <div class="impact-counter">
+                    <p><span id="meals-saved">127</span> meals saved today in Karachi!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="container">
+            <h2>It's Simple. It's Local. It's Impactful.</h2>
+            <div class="steps">
+                <div class="step">
+                    <i class="fas fa-share-alt fa-3x"></i>
+                    <h3>Share</h3>
+                    <p>Have extra food? Snap a pic, add details, and post it to our map in minutes.</p>
+                </div>
+                <div class="step">
+                    <i class="fas fa-location-dot fa-3x"></i>
+                    <h3>Connect</h3>
+                    <p>Neighbors in need see your listing and connect directly to arrange pickup.</p>
+                </div>
+                <div class="step">
+                    <i class="fas fa-utensils fa-3x"></i>
+                    <h3>Nourish</h3>
+                    <p>Food finds a home, bellies are filled, and waste is prevented. Everyone wins!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="why-us">
+        <div class="container">
+            <h2>Why Join the NourishLocal Movement in Karachi?</h2>
+            <div class="benefits">
+                <div class="benefit">
+                    <h3>For Donors</h3>
+                    <ul>
+                        <li><i class="fas fa-trash-alt"></i> Reduce Waste: Prevent good food from ending up in the trash.</li>
+                        <li><i class="fas fa-heart"></i> Community Impact: Directly help neighbors and foster goodwill in Karachi.</li>
+                        <li><i class="fas fa-check-circle"></i> Easy & Convenient: Simple posting process, connect directly with local recipients.</li>
+                    </ul>
+                </div>
+                <div class="benefit">
+                    <h3>For Recipients</h3>
+                    <ul>
+                        <li><i class="fas fa-carrot"></i> Access Fresh Food: Find free, edible food items nearby in Karachi.</li>
+                        <li><i class="fas fa-coins"></i> Save Money: Stretch your budget by accessing free local resources.</li>
+                        <li><i class="fas fa-users"></i> Support Local: Build connections within your Karachi community.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="call-to-action">
+        <div class="container">
+            <h2>Ready to Make a Difference in Karachi?</h2>
+            <div class="cta-buttons">
+                <a href="#" class="button primary">Find Free Food Now</a>
+                <a href="#" class="button secondary">Start Donating Today</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <nav>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </nav>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+            <p>&copy; 2025 NourishLocal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Basic JavaScript for the impact counter (could be dynamically updated later)
+        document.addEventListener('DOMContentLoaded', function() {
+            const mealsSavedElement = document.getElementById('meals-saved');
+            if (mealsSavedElement) {
+                // For demonstration, update every few seconds
+                setInterval(() => {
+                    // Update by a random small amount to simulate real-time growth
+                    const currentCount = parseInt(mealsSavedElement.textContent);
+                    mealsSavedElement.textContent = currentCount + Math.floor(Math.random() * 5); 
+                }, 3000); // Updates every 3 seconds
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nearby Doctors</title>
+    <style>
+     :root{ --dark-bg: #0a5347;
+            --darker-bg: #050508;
+            --card-bg: rgba(22, 34, 33, 0.85);
+            --accent-color: #4a6fff;
+            --text-color: #f0f0f8;
+            --secondary-text: #b0b0c0;
+            --emergency-red: #ff4a6a;
+            --doctor-blue: #4a8fff;
+            --ambulance-orange: #ff8a4a;
+            --nav-bg: rgba(10, 10, 18, 0.9);
+            --nav-text: #f0f0f8;
+            --nav-hover: #4a6fff;
+             --primary-accent: #20c9c9;
+      --secondary-accent: #189898;
+      --card-bg: #1e1e1e;
+      --card-border: #333333;
+      --text-light: #f0f0f0;
+      --text-secondary: #b0b0b0;
+      --success-green: #34a853;
+      --error-red: #ea4335;
+      --accent-glow: rgba(32, 201, 201, 0.15);
+      --input-bg: #2a2a2a;}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+          body {
+            background-color: var(--dark-bg);
+            color: whitesmoke;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(rgba(10, 10, 18, 0.585), rgba(10, 10, 18, 0.514)),
+                url('./2.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            transition: all 0.5s ease;
+        }
+
+        body.light-theme {
+            --dark-bg: #f0f0f872;
+            --darker-bg: #e0e0e884;
+            --card-bg: rgba(255, 255, 255, 0.463);
+            --text-color: #000000; /* Changed to black */
+            --secondary-text: #505060;
+            --nav-bg: rgba(240, 240, 248, 0.9);
+            --nav-text: #0a0a12;
+            --nav-hover: #4a6fff;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.138), rgba(252, 252, 255, 0.264)),
+                url('./23.jpg');
+            color: black;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+
+        .container1 {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-color);
+            text-decoration: none;
+            background: linear-gradient(90deg, var(--accent-color), var(--emergency-red));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--nav-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 1rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--nav-hover);
+        }
+
+        .utility-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            color: var(--nav-text);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+         .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-color);
+            text-decoration: none;
+            background: linear-gradient(90deg, var(--accent-color), var(--emergency-red));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--highlight-color);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .location-status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .location-status.found {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+
+        .location-status.error {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: #F44336;
+        }
+
+        .search-bar {
+            display: flex;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+
+        .search-bar button {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .search-bar button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .doctors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .doctor-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .doctor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .doctor-icon {
+            height: 100px;
+            background-color: var(--icon-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--highlight-color);
+        }
+
+        .doctor-info {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .doctor-name {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color); /* Updated to use variable */
+        }
+
+        .doctor-specialization {
+            display: inline-block;
+            background-color: rgba(22, 96, 136, 0.3);
+            color: var(--highlight-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .doctor-detail {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.7rem;
+            font-size: 0.95rem;
+            color: var(--text-color); /* Updated to use variable */
+        }
+
+        .doctor-detail i {
+            margin-right: 0.8rem;
+            color: var(--highlight-color);
+            width: 20px;
+            text-align: center;
+        }
+
+        .distance {
+            display: flex;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-color); /* Updated to use variable */
+        }
+
+        .distance-value {
+            font-weight: bold;
+            color: var(--highlight-color);
+            margin-left: 0.5rem;
+        }
+
+        .call-button {
+            margin-top: auto;
+            padding: 0.8rem;
+            background-color: var(--call-button-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            text-align: center;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+ .click{
+            background-color: #ff0033;
+      color: white;
+      border: none;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+       margin-top: auto;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            text-align: center;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .click:hover{
+ background-color: #cc002a;
+      transform: scale(1.05);
+        }
+       
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+            color: var(--text-color); /* Updated to use variable */
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .doctors-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+ <header>
+        <div class="container1">
+            <nav class="navbar">
+                <a href="index.html" class="logo">Safeguard Online</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+          <li><a href="emergency.html">Emergency Help</a></li>
+          <li><a href="hospital.html">Hospitals</a></li>
+          <li><a href="do.html">Doctors</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="feature.html">Features</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Login/Register</a></li>
+          <li><a href="user.html">User Profile</a></li>
+                </ul>
+                <div class="utility-buttons">
+                    <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+                </div>
+            </nav>
+        </div>
+    </header><br><br><br>
+
+    <div class="container">
+       <div class="page-header">
+            <h1>Find Nearby Doctors</h1>
+            <p class="subtitle">Browse healthcare professionals in your area</p>
+        
+             <br>
+
+            <div class="location-status" id="locationStatus">
+                <i class="fas fa-location-arrow"></i> Detecting your location...
+            </div>
+      
+</div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search by specialty or doctor name...">
+            <a href="doctors"><button><i class="fas fa-search"></i> Search</button></a>
+        </div>
+
+        <div id="doctorsContainer">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Loading doctors near you...
+            </div>
+
+        </div>
+    </div>
+    <br>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        
+        themeToggle.addEventListener('click', () => {
+            const icon = themeToggle.querySelector('i');
+            document.body.classList.toggle('light-theme');
+
+            // Change icon
+            if (document.body.classList.contains('light-theme')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const doctorsContainer = document.getElementById('doctorsContainer');
+            const locationStatus = document.getElementById('locationStatus');
+            
+            let userLocation = null;
+
+            // Medical specialty icons mapping
+            const specialtyIcons = {
+                "Cardiologist": "fa-heartbeat",
+                "Neurologist": "fa-brain",
+                "Pediatrician": "fa-baby",
+                "Orthopedic Surgeon": "fa-bone",
+                "Dermatologist": "fa-allergies",
+                "Oncologist": "fa-microscope",
+                "General Practitioner": "fa-user-md",
+                "Dentist": "fa-tooth",
+                "Ophthalmologist": "fa-eye",
+                "Psychiatrist": "fa-head-side-virus"
+            };
+
+            // Default icon for unknown specialties
+            const defaultIcon = "fa-user-md";
+
+            // Sample doctor data (in a real app, this would come from an API)
+            const doctors = [
+                {
+                    id: 1,
+                    name: "Dr. Tahir Shafi",
+                    specialization: "Plastic & Reconstructive Surgeon (Burn Care)",
+                    phone: "+92 21 111 174 174",
+                    hospital: "Patel Hospital",
+                    latitude: 24.8967,
+                    longitude: 67.0500
+                },
+                {
+                    id: 2,
+                    name: "Dr. Fauzia Bashir",
+                    specialization: " General Physician / Emergency Medicine",
+                    phone: "+92 21 111 111 880",
+                    hospital: "Indus Hospital & Health Network",
+                    latitude: 24.8550,
+                    longitude: 67.0900
+                },
+                {
+                    id: 3,
+                    name: "Dr. Mansoor Ahmed",
+                    specialization: " Cardiologist",
+                    phone: "+92 21 111 844 844",
+                    hospital: "Tabba Heart Institute",
+                    latitude: 40.7352,
+                    longitude: -74.0021
+                },
+                {
+                    id: 4,
+                    name: "Dr. Muhammad Hassan Shaikh",
+                    specialization: "Neurologist",
+                    phone: "+92 21 111 942 942",
+                    hospital: "Dr. Ziauddin Hospital",
+                    latitude: 40.7043,
+                    longitude: -74.0176
+                },
+                {
+                    id: 5,
+                    name: "Dr. Javaid Khan",
+                    specialization: "Pulmonologist",
+                    phone: "+92 21 111 911 911",
+                    hospital: "Aga Khan University Hospital",
+                    latitude: 40.7289,
+                    longitude: -73.9924
+                },
+                {
+                    id: 6,
+                    name: "Dr. Ayesha Khalid",
+                    specialization: "Cardiologist",
+                    phone: "+92 300 1234567",
+                    hospital: "Tabba Heart Institute",
+                    latitude: 40.7182,
+                    longitude: -74.0153
+                }
+                 
+            ];
+
+            // Get user's location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        userLocation = {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        };
+                        locationStatus.innerHTML = '<i class="fas fa-check-circle"></i> Location found';
+                        locationStatus.classList.add('found');
+                        displayDoctors();
+                    },
+                    function(error) {
+                        console.error("Error getting location:", error);
+                        locationStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> Location access denied. Showing sample data.';
+                        locationStatus.classList.add('error');
+                        // Use default location (New York) if permission denied
+                        userLocation = {
+                            latitude: 40.7128,
+                            longitude: -74.0060
+                        };
+                        displayDoctors();
+                    }
+                );
+            } else {
+                locationStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> Geolocation not supported by browser. Showing sample data.';
+                locationStatus.classList.add('error');
+                // Use default location if geolocation not supported
+                userLocation = {
+                    latitude: 40.7128,
+                    longitude: -74.0060
+                };
+                displayDoctors();
+            }
+
+            // Function to calculate distance between two coordinates in miles
+            function calculateDistance(lat1, lon1, lat2, lon2) {
+                const R = 6371; // Earth radius in km
+                const dLat = (lat2 - lat1) * Math.PI / 180;
+                const dLon = (lon2 - lon1) * Math.PI / 180;
+                const a = 
+                    Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                    Math.sin(dLon/2) * Math.sin(dLon/2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                const distanceInKm = R * c;
+                const distanceInMiles = distanceInKm * 0.621371;
+                return distanceInMiles;
+            }
+
+            // Get icon for specialty
+            function getSpecialtyIcon(specialty) {
+                return specialtyIcons[specialty] || defaultIcon;
+            }
+
+            // Display doctors with distance information
+            function displayDoctors() {
+                if (!userLocation) return;
+
+                // Calculate distance for each doctor and sort by distance
+                const doctorsWithDistance = doctors.map(doctor => {
+                    const distance = calculateDistance(
+                        userLocation.latitude,
+                        userLocation.longitude,
+                        doctor.latitude,
+                        doctor.longitude
+                    );
+                    return { ...doctor, distance };
+                }).sort((a, b) => a.distance - b.distance);
+
+                // Generate HTML for doctors
+                let html = '<div class="doctors-grid">';
+                
+                doctorsWithDistance.forEach(doctor => {
+                    const iconClass = getSpecialtyIcon(doctor.specialization);
+                    html += `
+                        <div class="doctor-card">
+                            <div class="doctor-icon">
+                                <i class="fas ${iconClass}"></i>
+                            </div>
+                            <div class="doctor-info">
+                                <h3 class="doctor-name">${doctor.name}</h3>
+                                <span class="doctor-specialization">${doctor.specialization}</span>
+                                
+                                <div class="doctor-detail">
+                                    <i class="fas fa-hospital"></i>
+                                    <span>${doctor.hospital}</span>
+                                </div>
+                                
+                                <div class="doctor-detail">
+                                    <i class="fas fa-phone"></i>
+                                    <span>${doctor.phone}</span>
+                                </div>
+                                
+                                <div class="distance">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Distance:</span>
+                                    <span class="distance-value">${doctor.distance.toFixed(1)} miles</span>
+                                </div><br>
+                                
+                                <button class="click" onclick="window.location.href='tel:${doctor.phone.replace(/\D/g, '')}'">
+                                    <i class="fas fa-phone-alt"></i>    Call Now
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += '</div>';
+                doctorsContainer.innerHTML = html;
+            }
+
+            // Search functionality
+            const searchInput = document.querySelector('.search-bar input');
+            const searchButton = document.querySelector('.search-bar button');
+            
+            searchButton.addEventListener('click', function() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const doctorCards = document.querySelectorAll('.doctor-card');
+                
+                doctorCards.forEach(card => {
+                    const name = card.querySelector('.doctor-name').textContent.toLowerCase();
+                    const specialization = card.querySelector('.doctor-specialization').textContent.toLowerCase();
+                    const hospital = card.querySelector('.doctor-detail:nth-of-type(1) span').textContent.toLowerCase();
+                    
+                    if (name.includes(searchTerm) || 
+                        specialization.includes(searchTerm) || 
+                        hospital.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Allow search on Enter key
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchButton.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

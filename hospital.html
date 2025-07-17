@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickMed - Nearby Doctors</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+    :root {
+      --dark-bg: #0a5347;
+      --light-bg: #ffffff;
+      --light-text: #ffffff;
+      --dark-text: #000000;
+    }
+
+    body {
+      background-image: url('images/1.png');
+      background-size: cover;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-position: center;
+      color: var(--light-text);
+      padding-top: 70px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body.light-mode {
+      background-image: url('images/2.png'); /* You can set any light-mode image */
+      background-color: var(--light-bg);
+      color: var(--dark-text);
+    }
+
+    .navbar {
+      background-color: #0a0a0a;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 999;
+    }
+
+    .navbar-brand {
+      color: #fff !important;
+      width: 40px;
+      height: 40px;
+      
+    }
+
+    .nav-link {
+      margin: 10px;
+    }
+    .navbar-toggler {
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    body.light-mode .navbar,
+    body.light-mode footer {
+      background-color: #f8f9fa;
+      color: #000;
+    }
+
+    body.light-mode .navbar-brand,
+    body.light-mode .nav-link {
+      color: #000 !important;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .emergency-btn {
+      background-color: red;
+      color: white;
+      font-size: 20px;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .emergency-btn:hover {
+      transform: scale(1.1);
+    }
+
+    body.light-mode .emergency-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    footer {
+      background-color: #050505;
+      color: #ffffff;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      color: white;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+    body.light-mode .theme-toggle {
+      color: #000;
+    }
+           /* Footer */
+        .footer {
+
+            background:black;
+            padding: 3rem 2rem 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            display: block;
+            opacity: 0.8;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-color);
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 2rem;
+            color: var(--text-color);
+            opacity: 0.6;
+        }
+
+        /* Social Icons */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: var(--card-bg);
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: var(--shadow);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .contact-section {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .main-content {
+                padding: 2rem 1rem;
+            }
+
+            .footer {
+                padding: 2rem 1rem 1rem;
+            }
+        }
+
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #ffffff;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            color: #fafbfb;
+            margin: 30px 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .location-btn {
+            padding: 12px 25px;
+            background-color: #ff0033;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .location-btn:hover {
+            background-color: #cc002a;
+            transform: translateY(-2px);
+        }
+
+        .hospitals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px; /* Increased gap between cards */
+            margin-top: 20px;
+        }
+
+        .hospital-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hospital-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .hospital-card h3 {
+            margin: 0 0 15px;
+            color: #ffffff;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .hospital-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .hospital-info p {
+            margin: 0;
+            color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+        }
+
+        .hospital-info i {
+            color: #ff0033;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .call-btn {
+            margin-top: auto;
+            padding: 12px 20px;
+            background-color: #ff0033;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            width: fit-content;
+        }
+
+        .call-btn:hover {
+            background-color: #cc002a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(255, 0, 0, 0.4);
+        }
+
+        .loading {
+            display: none;
+            margin: 20px 0;
+            color: #fff;
+            font-size: 1.1rem;
+        }
+
+        .loading i {
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .hospitals-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hospital-card {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .location-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+     
+<nav class="navbar navbar-expand-lg navbar-dark px-3">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img src="images/logo-removebg-preview (4).png" alt="Logo" style="height: 40px; width: auto; margin-right: 10px;">
+      <span>SAFEGUARD ONLINE</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="emergency.html">Emergency Help</a></li>
+        <li class="nav-item"><a class="nav-link" href="hospital.html">Hospitals</a></li>
+           <li class="nav-item"><a class="nav-link" href="feature.html">Features</a></li>
+         <li class="nav-item"><a class="nav-link" href="doctor.html">Doctors</a></li>
+        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="http://localhost/safeguard/register.php">Register/Login</a></li>
+      </ul>
+      <button class="theme-toggle" id="themeToggle" title="Toggle Theme">🌓</button>
+    </div>
+  </div>
+</nav>
+</nav><br><br><br>
+    <div class="container">
+        <h1>Find Nearby Hospitals</h1>
+        <button class="location-btn" onclick="getLocation()">
+            <i class="fas fa-map-marker-alt"></i> Detect Location & Find Hospitals
+        </button>
+        
+        <div id="loading" class="loading">
+            <i class="fas fa-spinner"></i> Finding hospitals near you...
+        </div>
+        
+        <div id="results"></div>
+    </div>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About YourCompany</h4>
+                <p>We are a leading company dedicated to providing exceptional services and building lasting relationships with our clients.</p>
+            </div>
+
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="index.html">Home</a>
+                <a href="emergency.html">Emergency Help</a>
+                <a href="hospital.html">Hospitals</a>
+                <a href="do.html">Doctors</a>
+                <a href="about.html">About</a>
+                <a href="feature.html">Features</a>
+                <a href="contact.html">Contact</a>
+                <a href="http://localhost/safeguard/register.php">Login/Register</a>
+                <a href="user.html">User Profile</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Services</h4>
+                <a href="#">Web Development</a>
+                <a href="#">Mobile Apps</a>
+                <a href="#">Digital Marketing</a>
+                <a href="#">Consulting</a>
+                <a href="#">Support</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 YourCompany. All rights reserved. | Privacy Policy | Terms of Service</p>
+        </div>
+    </footer>
+<script>
+  const hospitals = [
+    { name: "Tabba Heart Institute", lat: 24.8850, lon: 67.0700, contact: "+92 21 111 844 844" },
+    { name: "Medicare Cardiac & General Hospital", lat: 24.8580, lon: 67.0044, contact: "+92 21 111 001 786" },
+    { name: "Dr. Ziauddin Hospital", lat: 24.8650, lon: 67.0030, contact: "021-111-942-942" },
+    { name: "Memon Medical Institute Hospital", lat: 24.9150, lon: 67.0900, contact: "021-111-664-664" },
+    { name: "Civil Hospital Karachi", lat: 24.8624, lon: 67.0099, contact: "+92-344-3333004" },
+    { name: "Indus Hospital", lat: 24.8258, lon: 67.1501, contact: "(021) 111 111 880" },
+    { name: "Aga Khan University Hospital", lat: 24.8688, lon: 67.0692, contact: "+92 21 111 911 911" },
+    { name: "Jinnah Postgraduate Medical Center", lat: 24.8615, lon: 67.0363, contact: "+92-21-99201300" },
+    { name: "RIMS Trauma Hospital", lat: 24.8800, lon: 67.0600, contact: "(021) 34311340-3" }
+  ];
+
+  // Distance calculation
+  function haversine(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Earth radius in KM
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  // Location detection
+  function getLocation() {
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('results').innerHTML = '';
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showNearbyHospitals, showError);
+    } else {
+      document.getElementById('loading').style.display = 'none';
+      alert("Geolocation is not supported by this browser.");
+    }
+  }
+
+  function showError(error) {
+    document.getElementById('loading').style.display = 'none';
+    alert("Location Error: " + error.message);
+  }
+
+  function showNearbyHospitals(position) {
+    const userLat = position.coords.latitude;
+    const userLon = position.coords.longitude;
+
+    setTimeout(() => {
+      const nearby = hospitals.map(hospital => {
+        const distance = haversine(userLat, userLon, hospital.lat, hospital.lon);
+        return { ...hospital, distance: distance.toFixed(2) };
+      }).sort((a, b) => a.distance - b.distance);
+
+      let html = `<h2><i class="fas fa-hospital"></i> Nearby Hospitals</h2>
+                  <div class="hospitals-grid">`;
+
+      nearby.forEach(hospital => {
+        html += `
+          <div class="hospital-card">
+            <h3>${hospital.name}</h3>
+            <div class="hospital-info">
+              <p><i class="fas fa-map-marker-alt"></i> ${hospital.distance} KM away</p>
+              <p><i class="fas fa-phone"></i> ${hospital.contact}</p>
+            </div>
+            <a href="tel:${hospital.contact.replace(/[^+\d]/g, '')}" class="call-btn">
+              <i class="fas fa-phone-alt"></i> Call Now
+            </a>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+      document.getElementById("results").innerHTML = html;
+      document.getElementById('loading').style.display = 'none';
+    }, 1000); // Simulated delay
+  }
+
+  // Theme toggle
+  const toggleBtn = document.getElementById('themeToggle');
+  toggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode');
+  });
+</script>
+
+</body>
+</html>

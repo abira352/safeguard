@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safeguard Online - User Profile</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <style>
+  :root {
+            --dark-bg: #0a5347;
+            --darker-bg: #050508;
+            --card-bg: rgba(22, 34, 33, 0.85);
+            --accent-color: #4a6fff;
+            --text-color: #f0f0f8;
+            --secondary-text: #b0b0c0;
+            --emergency-red: #ff4a6a;
+            --doctor-blue: #4a8fff;
+            --ambulance-orange: #ff8a4a;
+            --nav-bg: rgba(10, 10, 18, 0.9);
+            --nav-text: #f0f0f8;
+            --nav-hover: #4a6fff;
+             --primary-accent: #20c9c9;
+      --secondary-accent: #189898;
+      --dark-bg: #121212;
+      --darker-bg: #0a0a0a;
+      --card-bg: #1e1e1e;
+      --card-border: #333333;
+      --text-light: #f0f0f0;
+      --text-secondary: #b0b0b0;
+      --success-green: #34a853;
+      --error-red: #ea4335;
+      --accent-glow: rgba(32, 201, 201, 0.15);
+      --input-bg: #2a2a2a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(rgba(10, 10, 18, 0.185), rgba(10, 10, 18, 0.9)),
+                url('./24.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            transition: all 0.5s ease;
+        }
+
+        body.light-theme {
+            --dark-bg: #f0f0f857;
+            --darker-bg: #e0e0e897;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --text-color: #0a0a12;
+            --secondary-text: #505060;
+            --nav-bg: rgba(240, 240, 248, 0.46);
+            --nav-text: #0a0a12;
+            --nav-hover: #4a6fff;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.23), rgba(252, 252, 255, 0.219)),
+                url('./26.jpg');
+                background-position: center;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-color);
+            text-decoration: none;
+            background: linear-gradient(90deg, var(--accent-color), var(--emergency-red));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--nav-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 1rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--nav-hover);
+        }
+
+        .utility-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            color: var(--nav-text);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+
+    .profile-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: rgba(30, 30, 30, 0.229);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(8px);
+    }
+
+    .profile-header {
+      background: linear-gradient(
+        135deg,
+        var(--primary-accent),
+        var(--secondary-accent)
+      );
+      color: white;
+      padding: 1.5rem 2rem;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .profile-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .profile-title i {
+      font-size: 1.2rem;
+    }
+
+    .profile-content {
+      padding: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary-accent);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.8rem 1rem 0.8rem 2.5rem;
+      background-color: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: var(--text-light);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 1rem;
+      top: 2.4rem;
+      color: var(--primary-accent);
+    }
+
+    textarea.form-control {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    select.form-control {
+      appearance: none;
+      background-image: url("");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 16px;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-accent);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--secondary-accent);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(32, 201, 201, 0.3);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--success-green);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+        background-attachment: scroll;
+      }
+      .two-column {
+        grid-template-columns: 1fr;
+      }
+      .profile-content {
+        padding: 1.5rem;
+      }
+      .action-buttons {
+        flex-direction: column;
+      }
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">Safeguard Online</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+          <li><a href="emergency.html">Emergency Help</a></li>
+          <li><a href="hospital.html">Hospitals</a></li>
+          <li><a href="do.html">Doctors</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="feature.html">Features</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Login/Register</a></li>
+          <li><a href="user.html">User Profile</a></li>
+                </ul>
+                <div class="utility-buttons">
+                    <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+                </div>
+            </nav>
+        </div>
+    </header><br><br><br><br><br>
+  <form id="profileForm" action="save_profile.php" method="POST">
+    <div class="profile-container">
+      <div class="profile-header">
+        <h1 class="profile-title">
+          <i class="fas fa-user-shield"></i> Safeguard Online Profile
+        </h1>
+      </div>
+
+      <div class="profile-content">
+        <!-- Personal Info -->
+        <div class="section">
+          <h3 class="section-title">
+            <i class="fas fa-user"></i> Personal Information
+          </h3>
+          <div class="two-column">
+            <div class="form-group">
+              <label for="fullName">Full Name</label>
+              <i class="fas fa-user input-icon"></i>
+              <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Your Full Name" required />
+            </div>
+            <div class="form-group">
+              <label for="dob">Age</label>
+              <i class="fas fa-birthday-cake input-icon"></i>
+              <input type="dob" class="form-control" id="age" name="dob" placeholder="Your Age" min="1" max="120" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <i class="fas fa-venus-mars input-icon"></i>
+            <select class="form-control" id="gender" name="gender" required>
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+              <option value="Prefer not to say">Prefer not to say</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Medical Info -->
+        <div class="section">
+          <h3 class="section-title">
+            <i class="fas fa-heartbeat"></i> Medical Information
+          </h3>
+          <div class="two-column">
+            <div class="form-group">
+              <label for="bloodGroup">Blood Group</label>
+              <i class="fas fa-tint input-icon"></i>
+              <select class="form-control" id="bloodGroup" name="bloodGroup">
+                <option value="">Select Blood Group</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+                <option value="Unknown">Unknown</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="allergies">Allergies</label>
+              <i class="fas fa-allergies input-icon"></i>
+              <input type="text" class="form-control" id="allergies" name="allergies" placeholder="List any allergies" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="conditions">Chronic Conditions</label>
+            <i class="fas fa-disease input-icon"></i>
+            <input type="text" class="form-control" id="conditions" name="conditions" placeholder="e.g. Diabetes, Migraine" />
+          </div>
+        </div>
+
+        <!-- Emergency Contact -->
+        <div class="section">
+          <h3 class="section-title">
+            <i class="fas fa-phone-alt"></i> Emergency Contact
+          </h3>
+          <div class="two-column">
+            <div class="form-group">
+              <label for="contactName">Contact Name</label>
+              <i class="fas fa-user input-icon"></i>
+              <input type="text" class="form-control" id="contactName" name="contactName" placeholder="Emergency Contact" />
+            </div>
+            <div class="form-group">
+              <label for="contactPhone">Phone Number</label>
+              <i class="fas fa-mobile-alt input-icon"></i>
+              <input type="tel" class="form-control" id="contactPhone" name="contactPhone" placeholder="+92 3123 4567" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="contactRelation">Relationship</label>
+            <i class="fas fa-users input-icon"></i>
+            <input type="text" class="form-control" id="contactRelation" name="contactRelation" placeholder="Spouse, Parent, etc." />
+          </div>
+        </div>
+
+        <!-- Location & Notes -->
+        <div class="section">
+          <h3 class="section-title">
+            <i class="fas fa-map-marker-alt"></i> Location & Notes
+          </h3>
+          <div class="form-group">
+            <label for="address">Address</label>
+            <i class="fas fa-home input-icon"></i>
+            <input type="text" class="form-control" id="address" name="address" placeholder="Your current address" />
+          </div>
+          <div class="form-group">
+            <label for="medicalNote">Medical Note (Optional)</label>
+            <i class="fas fa-sticky-note input-icon"></i>
+            <textarea class="form-control" id="medicalNote" name="medicalNote" placeholder="Any additional medical information"></textarea>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button type="submit" class="btn btn-primary glow-effect">
+            <i class="fas fa-save"></i> Save Profile
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const toast = document.getElementById("toast");
+
+      // Show success toast after submit
+      document.getElementById("profileForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        toast.innerHTML = '<i class="fas fa-check-circle"></i> Profile saved successfully!';
+        toast.style.backgroundColor = "#34a853";
+        toast.classList.add("show");
+        setTimeout(() => {
+          toast.classList.remove("show");
+          this.submit();
+        }, 1500);
+      });
+    });
+     themeToggle.addEventListener('click', () => {
+                const icon = themeToggle.querySelector('i');
+                document.body.classList.toggle('light-theme');
+
+                // Change icon
+                if (document.body.classList.contains('light-theme')) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                }
+            });
+            
+            // Event listeners
+            prevBtn.addEventListener('click', () => {
+                prevItem();
+                if (isAutoRotate) {
+                    stopAutoRotate();
+                    startAutoRotate();
+                }
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                nextItem();
+                if (isAutoRotate) {
+                    stopAutoRotate();
+                    startAutoRotate();
+                }
+            });
+            
+            autoRotateToggle.addEventListener('change', function() {
+                isAutoRotate = this.checked;
+                if (isAutoRotate) {
+                    startAutoRotate();
+                } else {
+                    stopAutoRotate();
+                }
+            });
+  </script>
+</body>
+</html>
